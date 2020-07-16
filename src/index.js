@@ -16,7 +16,7 @@ let fahrenheit = false;
 
 const kelvinToCelsius = (kelvin) => Math.round(kelvin - 273.15);
 
-const celsiusToFahrenheit = (celsius) => Math.round((celsius * 9) / 5 + 32);
+const kelvinToFahrenheit = (kelvin) => Math.round(((kelvin - 273.15) * 9) / 5 + 32);
 
 const getWeatherData = async (city, latitude = '', longitude = '') => {
   try {
@@ -32,17 +32,18 @@ const getWeatherData = async (city, latitude = '', longitude = '') => {
     if (response.status === 200) {
       const weatherData = await response.json();
       const weather = weatherData.weather[0].main;
-      const minTempC = kelvinToCelsius(Number(weatherData.main.temp_min));
-      const maxTempC = kelvinToCelsius(Number(weatherData.main.temp_max));
-      const minTempF = celsiusToFahrenheit(minTempC);
-      const maxTempF = celsiusToFahrenheit(maxTempC);
       const city = weatherData.name;
       const { country } = weatherData.sys;
-      const tempC = kelvinToCelsius(Number(weatherData.main.temp));
-      const tempF = celsiusToFahrenheit(tempC);
+      const minTempRes = Number(weatherData.main.temp_min);
+      const maxTempRes = Number(weatherData.main.temp_max);
+      const tempRes = Number(weatherData.main.temp);
+
+      const minTemp = fahrenheit ? kelvinToFahrenheit(minTempRes) : kelvinToCelsius(minTempRes);
+      const maxTemp = fahrenheit ? kelvinToFahrenheit(maxTempRes) : kelvinToCelsius(maxTempRes);
+      const temp = fahrenheit ? kelvinToFahrenheit(tempRes) : kelvinToCelsius(tempRes);
 
       return {
-        weather, tempF, tempC, minTempF, minTempC, maxTempF, maxTempC, city, country,
+        weather, temp, minTemp, maxTemp, city, country,
       };
     }
     return { error: response.statusText };
@@ -52,9 +53,9 @@ const getWeatherData = async (city, latitude = '', longitude = '') => {
 };
 
 const renderDegrees = (weatherData) => {
-  tempDiv.textContent = `${fahrenheit ? `${weatherData.tempF} ºF` : `${weatherData.tempC} ºC`}`;
-  minTempDiv.textContent = `Min: ${fahrenheit ? `${weatherData.minTempF} ºF` : `${weatherData.minTempC} ºC`}`;
-  maxTempDiv.textContent = `Max: ${fahrenheit ? `${weatherData.maxTempF} ºF` : `${weatherData.maxTempC} ºC`}`;
+  tempDiv.textContent = `${weatherData.temp} ${fahrenheit ? ' ºF' : 'ºC'}`;
+  minTempDiv.textContent = `Min: ${weatherData.minTemp} ${fahrenheit ? 'ºF' : 'ºC'}`;
+  maxTempDiv.textContent = `Max: ${weatherData.maxTemp} ${fahrenheit ? 'ºF' : 'ºC'}`;
 };
 
 const render = (weatherData) => {
@@ -65,17 +66,17 @@ const render = (weatherData) => {
     cityCountryDiv.textContent = `${weatherData.city}, ${weatherData.country}`;
     weatherDiv.textContent = weatherData.weather;
     renderDegrees(weatherData);
-
     toggleContainerDiv.classList.remove('hidden');
-    toggle.addEventListener('change', async (event) => {
-      fahrenheit = event.target.checked;
-      loading.style.display = 'block';
-      const newWeatherData = await getWeatherData(weatherData.city);
-      loading.style.display = 'none';
-      render(newWeatherData);
-    });
   }
 };
+
+toggle.addEventListener('change', async (event) => {
+  fahrenheit = event.target.checked;
+  loading.style.display = 'block';
+  const newWeatherData = await getWeatherData(cityCountryDiv.textContent);
+  loading.style.display = 'none';
+  render(newWeatherData);
+});
 
 const changeElements = async (event) => {
   const city = cityInput.value;
