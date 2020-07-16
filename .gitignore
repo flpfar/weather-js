@@ -1,1 +1,5 @@
 config.js
+node_modules
+.eslintrc.json
+package-lock.json
+.stylelintrc.json
