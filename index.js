@@ -11,14 +11,6 @@ const loading = document.getElementById("loading");
 const toggleContainerDiv = document.getElementById('toggle-container');
 let fahrenheit = false;
 
-const weatherImages = {
-  cloudy: 'https://images.unsplash.com/photo-1533388021507-c0524ab8b0bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
-  rainy: 'https://images.unsplash.com/photo-1433863448220-78aaa064ff47?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80',
-  sunny: 'https://images.unsplash.com/photo-1500320821405-8fc1732209ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80'
-}
-
-
-
 function kelvinToCelsius(kelvin){
   return Math.round(kelvin - 273.15);
 }
