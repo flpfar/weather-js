@@ -14,16 +14,11 @@ const loading = document.getElementById('loading');
 const toggleContainerDiv = document.getElementById('toggle-container');
 let fahrenheit = false;
 
-function kelvinToCelsius(kelvin) {
-  return Math.round(kelvin - 273.15);
-}
+const kelvinToCelsius = (kelvin) => Math.round(kelvin - 273.15);
 
-function celsiusToFahrenheit(celsius) {
-  return Math.round((celsius * 9) / 5 + 32);
-}
+const celsiusToFahrenheit = (celsius) => Math.round((celsius * 9) / 5 + 32);
 
-
-async function getWeatherData(city, latitude = '', longitude = '') {
+const getWeatherData = async (city, latitude = '', longitude = '') => {
   try {
     let response;
     if (city) {
@@ -54,15 +49,15 @@ async function getWeatherData(city, latitude = '', longitude = '') {
   } catch (error) {
     return { error: error.message };
   }
-}
+};
 
-function renderDegrees(weatherData) {
+const renderDegrees = (weatherData) => {
   tempDiv.textContent = `${fahrenheit ? `${weatherData.tempF} ºF` : `${weatherData.tempC} ºC`}`;
   minTempDiv.textContent = `Min: ${fahrenheit ? `${weatherData.minTempF} ºF` : `${weatherData.minTempC} ºC`}`;
   maxTempDiv.textContent = `Max: ${fahrenheit ? `${weatherData.maxTempF} ºF` : `${weatherData.maxTempC} ºC`}`;
-}
+};
 
-function render(weatherData) {
+const render = (weatherData) => {
   if (weatherData.error) {
     cityInputError.textContent = weatherData.error;
     setTimeout(() => { cityInputError.textContent = ''; }, 2000);
@@ -77,9 +72,9 @@ function render(weatherData) {
       renderDegrees(weatherData);
     });
   }
-}
+};
 
-async function changeElements(event) {
+const changeElements = async (event) => {
   const city = cityInput.value;
   if (city === '') {
     return;
@@ -89,9 +84,9 @@ async function changeElements(event) {
   const weatherData = await getWeatherData(city);
   loading.style.display = 'none';
   render(weatherData);
-}
+};
 
-function changeElementsByGeolocation() {
+const changeElementsByGeolocation = () => {
   navigator.geolocation.getCurrentPosition(async position => {
     const { latitude, longitude } = position.coords;
     loading.style.display = 'block';
@@ -99,7 +94,7 @@ function changeElementsByGeolocation() {
     loading.style.display = 'none';
     render(weatherData);
   });
-}
+};
 
 changeElementsByGeolocation();
 cityBtn.addEventListener('click', changeElements);
