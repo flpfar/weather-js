@@ -21,8 +21,14 @@ A live demo is not available due to API key and github pages limitations.
 - **Requirement:** An [Open Weather API Key](https://openweathermap.org/appid#get) is required for running this project.
 - Clone this repository with: `git clone https://github.com/flpfar/weather-js.git`
 - Navigate to the project folder (weather-js)
-- Create a `config.js` file in the root directory, and set your OpenWeatherMap api key there: ` const API_KEY='your open weather map api key' `
-- Open the file `index.html` with the browser.
+- Create a `src/config.js` file, set your OpenWeatherMap api key there and export it: 
+``` 
+const API_KEY='your open weather map api key';
+export default API_KEY;
+```
+- Run `npm install`.
+- Run `npm build`.
+- Open the file `dist/index.html` with the browser.
 
 ## 👤 Author
 
@@ -36,7 +42,7 @@ A live demo is not available due to API key and github pages limitations.
 
 Contributions, issues and feature requests are welcome!
 
-Feel free to check the [issues page](/issues).
+Feel free to check the [issues page](https://github.com/flpfar/weather-js/issues).
 
 ## Show your support
 
