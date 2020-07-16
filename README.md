@@ -10,8 +10,9 @@ This app allows you to retrieve weather information from a city by typing its na
 
 - HTML5
 - CSS3
-- Javascript ES6
 - Tailwind CSS
+- Javascript ES6
+- Webpack
 
 ## Live Demo
 
