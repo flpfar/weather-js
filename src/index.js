@@ -67,9 +67,12 @@ const render = (weatherData) => {
     renderDegrees(weatherData);
 
     toggleContainerDiv.classList.remove('hidden');
-    toggle.addEventListener('change', (event) => {
+    toggle.addEventListener('change', async (event) => {
       fahrenheit = event.target.checked;
-      renderDegrees(weatherData);
+      loading.style.display = 'block';
+      const newWeatherData = await getWeatherData(weatherData.city);
+      loading.style.display = 'none';
+      render(newWeatherData);
     });
   }
 };
