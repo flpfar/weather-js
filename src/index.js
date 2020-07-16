@@ -1,4 +1,4 @@
-import API_KEY from './config'; // eslint-disable-line import/no-unresolved
+import API_KEY from './config'; // eslint-disable-line import/no-unresolved, import/extensions
 import './style.css';
 
 const cityInput = document.getElementById('city-input');
