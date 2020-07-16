@@ -1,0 +1,6 @@
+src/config.js
+dist/bundle.js
+node_modules
+.eslintrc.json
+package-lock.json
+.stylelintrc.json

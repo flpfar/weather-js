@@ -1,0 +1,88 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+#container {
+  --bg-url: url('https://images.unsplash.com/photo-1561583534-09e822ba83ba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1612&q=80');
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 0 10%;
+  background-image: var(--bg-url);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#city-btn {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+#city-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+#loading {
+  display: none;
+}
+
+#weather-container {
+  display: inline-flex;
+  justify-content: center;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 0 4rem;
+}
+
+#city-country {
+  font-size: 2rem;
+}
+
+#toggle-container {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 0.5rem 1rem;
+}
+
+#toggle:checked {
+  right: 0;
+}
+
+#temp {
+  display: flex;
+  margin-right: 2rem;
+  font-size: 5rem;
+  font-weight: 300;
+}
+
+/* Loading Spinner */
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin-left: 1rem;
+}
+
+.lds-dual-ring::after {
+  content: " ";
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

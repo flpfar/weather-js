@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+  <title>Weather App</title>
+</head>
+
+<body>
+  <div id="container">
+    <form class="flex relative items-center">
+      <input type="text" id="city-input" class="focus:outline-none rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 bg-white" placeholder="Enter a city" required>
+      <button id="city-btn" class="px-8 focus:outline-none rounded-r-lg text-white font-bold p-4 uppercase border-black border-t border-b border-r">Search</button>
+      <span id="loading" class="lds-dual-ring"></span>
+      <div id="city-input-error" class="absolute bottom-0 -mb-8 ml-2 text-red-600"></div>
+    </form>
+
+    <div id="weather-container" class="rounded-lg">
+      <div id="temp"></div>
+      <div class="flex flex-col justify-center">
+        <div id="city-country"></div>
+        <div class="flex justify-between">
+          <div>
+            <div id="min-temp"></div>
+            <div id="max-temp"></div>
+          </div>
+          <div id="weather" class="ml-4"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="toggle-container" class="rounded-lg hidden">
+      ºC
+      <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+        <input type="checkbox" name="toggle" id="toggle" class="focus:outline-none toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+        <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-transparent border-2 cursor-pointer"></label>
+      </div>
+      ºF
+    </div>
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
+</html>
