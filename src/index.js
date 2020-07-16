@@ -1,3 +1,6 @@
+import API_KEY from './config';
+import './style.css';
+
 const cityInput = document.getElementById('city-input');
 const cityInputError = document.getElementById('city-input-error');
 const cityBtn = document.getElementById('city-btn');
