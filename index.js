@@ -6,32 +6,32 @@ const cityCountryDiv = document.getElementById('city-country');
 const minTempDiv = document.getElementById('min-temp');
 const maxTempDiv = document.getElementById('max-temp');
 const weatherDiv = document.getElementById('weather');
-const toogle = document.getElementById('toogle');
-const loading = document.getElementById("loading");
+const toggle = document.getElementById('toggle');
+const loading = document.getElementById('loading');
 const toggleContainerDiv = document.getElementById('toggle-container');
 let fahrenheit = false;
 
-function kelvinToCelsius(kelvin){
+function kelvinToCelsius(kelvin) {
   return Math.round(kelvin - 273.15);
 }
 
-function celsiusToFahrenheit(celsius){
-  return Math.round((celsius * 9/5) + 32);
+function celsiusToFahrenheit(celsius) {
+  return Math.round((celsius * 9) / 5 + 32);
 }
 
 
 async function getWeatherData(city, latitude = '', longitude = '') {
-  try{
+  try {
     let response;
-    if(city){
-      response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);
-    } else if(latitude !== '' && longitude !== '') {
-      response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`);
+    if (city) {
+      response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`); // eslint-disable-line no-undef
+    } else if (latitude !== '' && longitude !== '') {
+      response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`); // eslint-disable-line no-undef
     } else {
-      return;
+      return { error: 'Invalid parameters' };
     }
-    
-    if(response.status === 200){
+
+    if (response.status === 200) {
       const weatherData = await response.json();
       const weather = weatherData.weather[0].main;
       const minTempC = kelvinToCelsius(Number(weatherData.main.temp_min));
@@ -39,22 +39,46 @@ async function getWeatherData(city, latitude = '', longitude = '') {
       const minTempF = celsiusToFahrenheit(minTempC);
       const maxTempF = celsiusToFahrenheit(maxTempC);
       const city = weatherData.name;
-      const country = weatherData.sys.country;
+      const { country } = weatherData.sys;
       const tempC = kelvinToCelsius(Number(weatherData.main.temp));
       const tempF = celsiusToFahrenheit(tempC);
 
-      return { weather, tempF, tempC, minTempF, minTempC, maxTempF, maxTempC, city, country };
+      return {
+        weather, tempF, tempC, minTempF, minTempC, maxTempF, maxTempC, city, country,
+      };
     }
-    return { error: response.statusText }
+    return { error: response.statusText };
   } catch (error) {
-    return { error: error.message }
+    return { error: error.message };
   }
 }
 
+function renderDegrees(weatherData) {
+  tempDiv.textContent = `${fahrenheit ? `${weatherData.tempF} ºF` : `${weatherData.tempC} ºC`}`;
+  minTempDiv.textContent = `Min: ${fahrenheit ? `${weatherData.minTempF} ºF` : `${weatherData.minTempC} ºC`}`;
+  maxTempDiv.textContent = `Max: ${fahrenheit ? `${weatherData.maxTempF} ºF` : `${weatherData.maxTempC} ºC`}`;
+}
 
-async function changeElements(event){
+function render(weatherData) {
+  if (weatherData.error) {
+    cityInputError.textContent = weatherData.error;
+    setTimeout(() => { cityInputError.textContent = ''; }, 2000);
+  } else {
+    cityCountryDiv.textContent = `${weatherData.city}, ${weatherData.country}`;
+    weatherDiv.textContent = weatherData.weather;
+    renderDegrees(weatherData);
+
+    toggleContainerDiv.classList.remove('hidden');
+    toggle.addEventListener('change', (event) => {
+      fahrenheit = event.target.checked;
+      renderDegrees(weatherData);
+    });
+  }
+}
+
+async function changeElements(event) {
   const city = cityInput.value;
-  if(city === '') {
+  if (city === '') {
     return;
   }
   event.preventDefault();
@@ -64,39 +88,15 @@ async function changeElements(event){
   render(weatherData);
 }
 
-function render(weatherData){
-  if(weatherData.error) {
-    cityInputError.textContent = weatherData.error;
-    setTimeout(() => {cityInputError.textContent = ''}, 2000);
-
-  } else {
-    console.log('I have the data', weatherData);
-    cityCountryDiv.textContent = `${weatherData.city}, ${weatherData.country}`;
-    weatherDiv.textContent = weatherData.weather;
-    renderDegrees(weatherData);
-
-    toggleContainerDiv.classList.remove('hidden');
-    toggle.addEventListener('change', () => {
-      fahrenheit = event.target.checked;
-      renderDegrees(weatherData);
-    });
-  }
-  
+function changeElementsByGeolocation() {
+  navigator.geolocation.getCurrentPosition(async position => {
+    const { latitude, longitude } = position.coords;
+    loading.style.display = 'block';
+    const weatherData = await getWeatherData(null, latitude, longitude);
+    loading.style.display = 'none';
+    render(weatherData);
+  });
 }
 
-function renderDegrees(weatherData){
-  tempDiv.textContent = `${fahrenheit ? weatherData.tempF + ' ºF' : weatherData.tempC + ' ºC' }`;
-  minTempDiv.textContent = `Min: ${fahrenheit ? weatherData.minTempF + ' ºF' : weatherData.minTempC + ' ºC' }`;
-  maxTempDiv.textContent = `Max: ${fahrenheit ? weatherData.maxTempF + ' ºF' : weatherData.maxTempC + ' ºC' }`;
-}
-
+changeElementsByGeolocation();
 cityBtn.addEventListener('click', changeElements);
-
-const a = navigator.geolocation.getCurrentPosition(async position => {
-  const { latitude, longitude } = position.coords;
-  loading.style.display = 'block';
-  const weatherData = await getWeatherData(null, latitude, longitude);
-  loading.style.display = 'none';
-  render(weatherData);
-});
-
